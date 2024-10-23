@@ -3,7 +3,6 @@ package med.fema.api.agendamento.service;
 import med.fema.api.agendamento.Agendamento;
 import med.fema.api.agendamento.repository.AgendamentoRepository;
 import med.fema.api.cancelamento.MotivoCancelamento;
-import med.fema.api.generics.PaginationRequest;
 import med.fema.api.medico.Medico;
 import med.fema.api.medico.repository.MedicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,16 +25,16 @@ public class AgendamentoService {
     private static final LocalTime HORARIO_ABERTURA = LocalTime.of(7, 0);
     private static final LocalTime HORARIO_FECHAMENTO = LocalTime.of(18, 0);
 
-    public Page<Agendamento> findAll(PaginationRequest request) {
-        return this.agendamentoRepository.findAll(request.toPageable());
+    public List<Agendamento> findAll() {
+        return this.agendamentoRepository.findAllByDataHoraAfterOrderByDataHoraAsc(LocalDateTime.now());
     }
 
-    public Page<Agendamento> findAllByPacienteId(PaginationRequest request, Long id) {
-        return this.agendamentoRepository.findAllByPacienteId(request.toPageable(), id);
+    public List<Agendamento> findAllByPacienteId(Long id) {
+        return this.agendamentoRepository.findAllByPacienteId(id);
     }
 
-    public Page<Agendamento> findAllByMedicoId(PaginationRequest request, Long id) {
-        return this.agendamentoRepository.findAllByMedicoId(request.toPageable(), id);
+    public List<Agendamento> findAllByMedicoId(Long id) {
+        return this.agendamentoRepository.findAllByMedicoId(id);
     }
 
     public Agendamento findById(Long id) {

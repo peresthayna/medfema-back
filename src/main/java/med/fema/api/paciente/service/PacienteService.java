@@ -1,12 +1,11 @@
 package med.fema.api.paciente.service;
 
-import med.fema.api.generics.PaginationRequest;
 import med.fema.api.paciente.Paciente;
 import med.fema.api.paciente.repository.PacienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -14,8 +13,8 @@ public class PacienteService {
     @Autowired
     private PacienteRepository pacienteRepository;
 
-    public Page<Paciente> recuperarTodosPaginados(PaginationRequest request) {
-        return this.pacienteRepository.findAll(request.toPageable());
+    public List<Paciente> getPacientes() {
+        return this.pacienteRepository.findAllByOrderByNomeAsc();
     }
 
     public Paciente recuperarPorId(Long id) {

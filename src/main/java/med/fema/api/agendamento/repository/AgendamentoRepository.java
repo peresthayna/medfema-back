@@ -13,6 +13,7 @@ import java.util.List;
 public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> {
     List<Agendamento> findByPacienteAndDataHora(Paciente paciente, LocalDateTime dataHora);
     List<Agendamento> findByMedicoAndDataHora(Medico medico, LocalDateTime dataHora);
-    Page<Agendamento> findAllByMedicoId(Pageable pageable, Long idMedico);
-    Page<Agendamento> findAllByPacienteId(Pageable pageable, Long idPaciente);
+    List<Agendamento> findAllByMedicoId(Long idMedico);
+    List<Agendamento> findAllByPacienteId(Long idPaciente);
+    List<Agendamento> findAllByDataHoraAfterOrderByDataHoraAsc(LocalDateTime dataHora);
 }

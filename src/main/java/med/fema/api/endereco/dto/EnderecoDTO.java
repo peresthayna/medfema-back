@@ -12,8 +12,6 @@ public class EnderecoDTO {
     @NotBlank
     private String logradouro;
     @NotBlank
-    private String bairro;
-    @NotBlank
     @Pattern(regexp = "\\d{8}")
     private String cep;
     private String numero;
@@ -25,7 +23,6 @@ public class EnderecoDTO {
 
     public EnderecoDTO(Endereco endereco) {
         this.logradouro = endereco.getLogradouro();
-        this.bairro = endereco.getBairro();
         this.cep = endereco.getCep();
         this.numero = endereco.getNumero();
         this.complemento = endereco.getComplemento();

@@ -43,5 +43,6 @@ public class Paciente {
         this.email = pacienteDTO.getEmail();
         this.cpf = pacienteDTO.getCpf();
         this.endereco = new Endereco(pacienteDTO.getEndereco());
+        this.ativo = true;
     }
 }

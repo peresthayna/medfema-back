@@ -13,7 +13,6 @@ import med.fema.api.endereco.dto.EnderecoDTO;
 public class Endereco {
 
     private String logradouro;
-    private String bairro;
     private String cep;
     private String numero;
     private String complemento;
@@ -22,7 +21,6 @@ public class Endereco {
 
     public Endereco(EnderecoDTO enderecoDTO) {
         this.logradouro = enderecoDTO.getLogradouro();
-        this.bairro = enderecoDTO.getBairro();
         this.cep = enderecoDTO.getCep();
         if(!enderecoDTO.getNumero().isEmpty()){
             this.numero = enderecoDTO.getNumero();

@@ -3,9 +3,7 @@ package med.fema.api.medico.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import med.fema.api.endereco.dto.EnderecoDTO;
-import med.fema.api.generics.PageResponseDTO;
 import med.fema.api.medico.Medico;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -27,17 +25,12 @@ public class MedicoDTO {
         this.email = medico.getEmail();
         this.telefone = medico.getTelefone();
         this.crm = medico.getCrm();
-        this.ativo = medico.isAtivo();
-        this.especialidade = medico.getEspecialidade().name();
+        this.especialidade = medico.getEspecialidade().getDescricao();
         this.endereco = new EnderecoDTO(medico.getEndereco());
+        this.ativo = true;
     }
 
     public static List<MedicoDTO> converterParaListDTO(List<Medico> medicos) {
         return medicos.stream().map(medico -> new MedicoDTO(medico)).toList();
-    }
-
-    public static PageResponseDTO<MedicoDTO> converterParaPageResponseDTO(Page<Medico> page) {
-        List<MedicoDTO> dto = converterParaListDTO(page.getContent());
-        return new PageResponseDTO<MedicoDTO>(dto, page.hasNext(), page.getTotalElements(), page.getTotalPages());
     }
 }

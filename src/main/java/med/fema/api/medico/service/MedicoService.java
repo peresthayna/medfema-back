@@ -1,12 +1,12 @@
 package med.fema.api.medico.service;
 
-import med.fema.api.generics.PaginationRequest;
+import med.fema.api.especialidade.Especialidade;
 import med.fema.api.medico.Medico;
 import med.fema.api.medico.repository.MedicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -14,12 +14,16 @@ public class MedicoService {
     @Autowired
     private MedicoRepository medicoRepository;
 
-    public Page<Medico> recuperarTodosPaginados(PaginationRequest request) {
-        return this.medicoRepository.findAll(request.toPageable());
+    public List<Medico> getMedicos() {
+        return this.medicoRepository.findAllByOrderByNomeAsc();
     }
 
     public Medico recuperarPorId(Long id) {
         return this.medicoRepository.findById(id).orElse(null);
+    }
+
+    public List<Medico> buscarMedicos(String busca) {
+        return this.medicoRepository.findAllByNomeContainingIgnoreCase(busca);
     }
 
     public Medico salvar(Medico medico) {

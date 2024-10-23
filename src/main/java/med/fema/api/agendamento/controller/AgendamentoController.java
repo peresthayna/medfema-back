@@ -4,11 +4,11 @@ import med.fema.api.agendamento.Agendamento;
 import med.fema.api.agendamento.dto.AgendamentoDTO;
 import med.fema.api.agendamento.service.AgendamentoService;
 import med.fema.api.cancelamento.MotivoCancelamento;
-import med.fema.api.generics.PageResponseDTO;
-import med.fema.api.generics.PaginationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/agendamento")
@@ -17,18 +17,18 @@ public class AgendamentoController {
     private AgendamentoService agendamentoService;
 
     @GetMapping()
-    public PageResponseDTO<AgendamentoDTO> findAll(PaginationRequest request) {
-        return AgendamentoDTO.converterParaPageResponseDTO(agendamentoService.findAll(request));
+    public List<AgendamentoDTO> findAll() {
+        return AgendamentoDTO.converterParaListDTO(agendamentoService.findAll());
     }
 
     @GetMapping("/paciente/{id}")
-    public PageResponseDTO<AgendamentoDTO> findAllByPaciente(PaginationRequest request, @PathVariable Long id) {
-        return AgendamentoDTO.converterParaPageResponseDTO(agendamentoService.findAllByPacienteId(request, id));
+    public List<AgendamentoDTO> findAllByPaciente(@PathVariable Long id) {
+        return AgendamentoDTO.converterParaListDTO(agendamentoService.findAllByPacienteId(id));
     }
 
     @GetMapping("/medico/{id}")
-    public PageResponseDTO<AgendamentoDTO> findAllByMedico(PaginationRequest request, @PathVariable Long id) {
-        return AgendamentoDTO.converterParaPageResponseDTO(agendamentoService.findAllByMedicoId(request, id));
+    public List<AgendamentoDTO> findAllByMedico(@PathVariable Long id) {
+        return AgendamentoDTO.converterParaListDTO(agendamentoService.findAllByMedicoId(id));
     }
 
     @GetMapping("/{id}")

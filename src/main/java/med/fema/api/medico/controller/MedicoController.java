@@ -1,12 +1,12 @@
 package med.fema.api.medico.controller;
 
-import med.fema.api.generics.PageResponseDTO;
-import med.fema.api.generics.PaginationRequest;
 import med.fema.api.medico.Medico;
 import med.fema.api.medico.dto.MedicoDTO;
 import med.fema.api.medico.service.MedicoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -16,8 +16,13 @@ public class MedicoController {
     private MedicoService medicoService;
 
     @GetMapping()
-    public PageResponseDTO<MedicoDTO> recuperarTodosPaginados(PaginationRequest request) {
-        return MedicoDTO.converterParaPageResponseDTO(this.medicoService.recuperarTodosPaginados(request));
+    public List<MedicoDTO> getMedicos() {
+        return MedicoDTO.converterParaListDTO(this.medicoService.getMedicos());
+    }
+
+    @GetMapping("/busca/{busca}")
+    public List<MedicoDTO> getMedicosBySearch(@PathVariable String busca) {
+        return MedicoDTO.converterParaListDTO(this.medicoService.buscarMedicos(busca));
     }
 
     @GetMapping("/{id}")
@@ -30,7 +35,7 @@ public class MedicoController {
         this.medicoService.salvar(new Medico(medicoDTO));
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public void atualizar(@PathVariable("id") Long id, @RequestBody MedicoDTO medicoDTO) {
         this.medicoService.atualizar(id, new Medico(medicoDTO));
     }

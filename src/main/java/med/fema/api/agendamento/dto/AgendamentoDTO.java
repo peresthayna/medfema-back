@@ -6,12 +6,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import med.fema.api.agendamento.Agendamento;
 import med.fema.api.cancelamento.MotivoCancelamento;
-import med.fema.api.generics.PageResponseDTO;
 import med.fema.api.medico.dto.MedicoDTO;
 import med.fema.api.paciente.dto.PacienteDTO;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -27,6 +27,7 @@ public class AgendamentoDTO {
     private LocalDateTime fimConsulta;
     private boolean ativo;
     private MotivoCancelamento motivoCancelamento;
+    private String dataFormatada;
 
     public AgendamentoDTO(Agendamento agendamento) {
         this.id = agendamento.getId();
@@ -36,14 +37,10 @@ public class AgendamentoDTO {
         this.fimConsulta = this.dataHora.plusHours(1);
         this.ativo = true;
         this.motivoCancelamento = null;
+        this.dataFormatada = this.dataHora.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
     public static List<AgendamentoDTO> converterParaListDTO(List<Agendamento> agendamentos) {
         return agendamentos.stream().map(agendamento -> new AgendamentoDTO(agendamento)).toList();
-    }
-
-    public static PageResponseDTO<AgendamentoDTO> converterParaPageResponseDTO(Page<Agendamento> page) {
-        List<AgendamentoDTO> dto = converterParaListDTO(page.getContent());
-        return new PageResponseDTO<AgendamentoDTO>(dto, page.hasNext(), page.getTotalElements(), page.getTotalPages());
     }
 }

@@ -1,12 +1,12 @@
 package med.fema.api.paciente.controller;
 
-import med.fema.api.generics.PageResponseDTO;
-import med.fema.api.generics.PaginationRequest;
 import med.fema.api.paciente.Paciente;
 import med.fema.api.paciente.dto.PacienteDTO;
 import med.fema.api.paciente.service.PacienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/paciente")
@@ -15,8 +15,8 @@ public class PacienteController {
     private PacienteService pacienteService;
 
     @GetMapping()
-    public PageResponseDTO<PacienteDTO> recuperarTodosPaginados(PaginationRequest request) {
-        return PacienteDTO.converterParaPageResponseDTO(this.pacienteService.recuperarTodosPaginados(request));
+    public List<PacienteDTO> getPacientes() {
+        return PacienteDTO.converterParaListDTO(this.pacienteService.getPacientes());
     }
 
     @GetMapping("/{id}")

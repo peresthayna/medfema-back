@@ -46,7 +46,8 @@ public class Medico {
         this.telefone = medicoDTO.getTelefone();
         this.email = medicoDTO.getEmail();
         this.crm = medicoDTO.getCrm();
-        this.especialidade = Especialidade.valueOf(medicoDTO.getEspecialidade());
+        this.especialidade = Especialidade.fromDescricao(medicoDTO.getEspecialidade());
         this.endereco = new Endereco(medicoDTO.getEndereco());
+        this.ativo = true;
     }
 }
