@@ -36,6 +36,11 @@ public class AgendamentoController {
         return new AgendamentoDTO(agendamentoService.findById(id));
     }
 
+    @GetMapping("/{nome}")
+    public List<AgendamentoDTO> findByNome(@PathVariable String nome) {
+        return AgendamentoDTO.converterParaListDTO(agendamentoService.findAllByMedicoNomeOrPacienteNome(nome));
+    }
+
     @PostMapping
     public void salvar(@RequestBody AgendamentoDTO agendamento) throws Exception {
         agendamentoService.criarAgendamento(new Agendamento(agendamento));

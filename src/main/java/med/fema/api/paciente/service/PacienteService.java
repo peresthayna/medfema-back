@@ -1,5 +1,6 @@
 package med.fema.api.paciente.service;
 
+import med.fema.api.agendamento.repository.AgendamentoRepository;
 import med.fema.api.paciente.Paciente;
 import med.fema.api.paciente.repository.PacienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,19 @@ import java.util.Optional;
 public class PacienteService {
     @Autowired
     private PacienteRepository pacienteRepository;
+    @Autowired
+    private AgendamentoRepository agendamentoRepository;
 
     public List<Paciente> getPacientes() {
-        return this.pacienteRepository.findAllByOrderByNomeAsc();
+        return this.pacienteRepository.findAllByAtivoTrueOrderByNomeAsc();
     }
 
     public Paciente recuperarPorId(Long id) {
         return this.pacienteRepository.findById(id).orElse(null);
+    }
+
+    public List<Paciente> buscarPacientes(String busca) {
+        return this.pacienteRepository.findAllByNomeContainingIgnoreCaseAndAtivoTrueOrderByNomeAsc(busca);
     }
 
     public Paciente salvar(Paciente paciente) {
@@ -41,8 +48,12 @@ public class PacienteService {
     public void deletar(Long id) {
         Optional<Paciente> paciente = this.pacienteRepository.findById(id);
         if(paciente.isPresent()) {
-            paciente.get().setAtivo(false);
-            this.pacienteRepository.save(paciente.get());
+            if(this.agendamentoRepository.findAllByPacienteIdOrderByDataHoraAsc(id).isEmpty()) {
+                paciente.get().setAtivo(false);
+                this.pacienteRepository.save(paciente.get());
+            } else {
+                throw new RuntimeException("Certifique-se que não há consultas agendadas, caso tenha, a desativação não poderá ser concluída.");
+            }
         }
     }
 }

@@ -40,7 +40,7 @@ public class MedicoController {
         this.medicoService.atualizar(id, new Medico(medicoDTO));
     }
 
-    @DeleteMapping
+    @DeleteMapping("/deletar/{id}")
     public void deletar(@PathVariable("id") Long id) {
         this.medicoService.deletar(id);
     }

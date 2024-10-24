@@ -1,5 +1,6 @@
 package med.fema.api.paciente.controller;
 
+import med.fema.api.medico.dto.MedicoDTO;
 import med.fema.api.paciente.Paciente;
 import med.fema.api.paciente.dto.PacienteDTO;
 import med.fema.api.paciente.service.PacienteService;
@@ -22,6 +23,11 @@ public class PacienteController {
     @GetMapping("/{id}")
     public PacienteDTO recuperarPorId(@PathVariable Long id) {
         return new PacienteDTO(this.pacienteService.recuperarPorId(id));
+    }
+
+    @GetMapping("/busca/{busca}")
+    public List<PacienteDTO> getPacientesBySearch(@PathVariable String busca) {
+        return PacienteDTO.converterParaListDTO(this.pacienteService.buscarPacientes(busca));
     }
 
     @PostMapping()

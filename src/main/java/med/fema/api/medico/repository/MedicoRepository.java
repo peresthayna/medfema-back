@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface MedicoRepository extends JpaRepository<Medico, Long> {
-    @Query("SELECT m FROM Medico m WHERE m NOT IN (SELECT a.medico FROM Agendamento a WHERE a.dataHora = :dataHora)")
+    @Query("SELECT m FROM Medico m WHERE m NOT IN (SELECT a.medico FROM Agendamento a WHERE a.dataHora = :dataHora) AND m.ativo = true ORDER BY m.nome ASC")
     List<Medico> findMedicosDisponiveis(LocalDateTime dataHora);
-    List<Medico> findAllByOrderByNomeAsc();
-    List<Medico> findAllByNomeContainingIgnoreCase(String nome);
+    List<Medico> findAllByAtivoTrueOrderByNomeAsc();
+    List<Medico> findAllByNomeContainingIgnoreCaseAndAtivoTrueOrderByNomeAsc(String nome);
 }

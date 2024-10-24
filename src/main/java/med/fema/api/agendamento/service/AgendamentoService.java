@@ -6,7 +6,6 @@ import med.fema.api.cancelamento.MotivoCancelamento;
 import med.fema.api.medico.Medico;
 import med.fema.api.medico.repository.MedicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -30,11 +29,15 @@ public class AgendamentoService {
     }
 
     public List<Agendamento> findAllByPacienteId(Long id) {
-        return this.agendamentoRepository.findAllByPacienteId(id);
+        return this.agendamentoRepository.findAllByPacienteIdOrderByDataHoraAsc(id);
     }
 
     public List<Agendamento> findAllByMedicoId(Long id) {
-        return this.agendamentoRepository.findAllByMedicoId(id);
+        return this.agendamentoRepository.findAllByMedicoIdOrderByDataHoraAsc(id);
+    }
+
+    public List<Agendamento> findAllByMedicoNomeOrPacienteNome(String nome) {
+        return this.agendamentoRepository.findAllByPacienteNomeContainingOrMedicoNomeContainingOrderByDataHoraAsc(nome, nome);
     }
 
     public Agendamento findById(Long id) {
@@ -89,11 +92,11 @@ public class AgendamentoService {
         if (!agendamento.getMedico().isAtivo()) {
             throw new Exception("O médico está inativo e não pode realizar consultas.");
         }
-        List<Agendamento> consultasNoMesmoDiaPaciente = agendamentoRepository.findByPacienteAndDataHora(agendamento.getPaciente(), agendamento.getDataHora());
+        List<Agendamento> consultasNoMesmoDiaPaciente = agendamentoRepository.findByPacienteAndDataHoraOrderByDataHoraAsc(agendamento.getPaciente(), agendamento.getDataHora());
         if (!consultasNoMesmoDiaPaciente.isEmpty()) {
             throw new Exception("Já existe uma consulta agendada para este paciente no mesmo dia.");
         }
-        List<Agendamento> consultasComMesmoMedico = agendamentoRepository.findByMedicoAndDataHora(agendamento.getMedico(), agendamento.getDataHora());
+        List<Agendamento> consultasComMesmoMedico = agendamentoRepository.findByMedicoAndDataHoraOrderByDataHoraAsc(agendamento.getMedico(), agendamento.getDataHora());
         if (!consultasComMesmoMedico.isEmpty()) {
             throw new Exception("O médico já possui uma consulta agendada nesse horário.");
         }

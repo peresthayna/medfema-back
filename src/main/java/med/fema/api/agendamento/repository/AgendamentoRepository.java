@@ -11,9 +11,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> {
-    List<Agendamento> findByPacienteAndDataHora(Paciente paciente, LocalDateTime dataHora);
-    List<Agendamento> findByMedicoAndDataHora(Medico medico, LocalDateTime dataHora);
-    List<Agendamento> findAllByMedicoId(Long idMedico);
-    List<Agendamento> findAllByPacienteId(Long idPaciente);
+    List<Agendamento> findByPacienteAndDataHoraOrderByDataHoraAsc(Paciente paciente, LocalDateTime dataHora);
+    List<Agendamento> findByMedicoAndDataHoraOrderByDataHoraAsc(Medico medico, LocalDateTime dataHora);
+    List<Agendamento> findAllByMedicoIdOrderByDataHoraAsc(Long idMedico);
+    List<Agendamento> findAllByPacienteIdOrderByDataHoraAsc(Long idPaciente);
     List<Agendamento> findAllByDataHoraAfterOrderByDataHoraAsc(LocalDateTime dataHora);
+    List<Agendamento> findAllByPacienteNomeContainingOrMedicoNomeContainingOrderByDataHoraAsc(String nomePaciente, String nomeMedico);
 }

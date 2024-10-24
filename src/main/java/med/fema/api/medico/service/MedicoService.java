@@ -1,5 +1,6 @@
 package med.fema.api.medico.service;
 
+import med.fema.api.agendamento.repository.AgendamentoRepository;
 import med.fema.api.especialidade.Especialidade;
 import med.fema.api.medico.Medico;
 import med.fema.api.medico.repository.MedicoRepository;
@@ -13,9 +14,11 @@ import java.util.Optional;
 public class MedicoService {
     @Autowired
     private MedicoRepository medicoRepository;
+    @Autowired
+    private AgendamentoRepository agendamentoRepository;
 
     public List<Medico> getMedicos() {
-        return this.medicoRepository.findAllByOrderByNomeAsc();
+        return this.medicoRepository.findAllByAtivoTrueOrderByNomeAsc();
     }
 
     public Medico recuperarPorId(Long id) {
@@ -23,7 +26,7 @@ public class MedicoService {
     }
 
     public List<Medico> buscarMedicos(String busca) {
-        return this.medicoRepository.findAllByNomeContainingIgnoreCase(busca);
+        return this.medicoRepository.findAllByNomeContainingIgnoreCaseAndAtivoTrueOrderByNomeAsc(busca);
     }
 
     public Medico salvar(Medico medico) {
@@ -46,8 +49,12 @@ public class MedicoService {
     public void deletar(Long id) {
         Optional<Medico> medico = this.medicoRepository.findById(id);
         if(medico.isPresent()) {
-            medico.get().setAtivo(false);
-            this.medicoRepository.save(medico.get());
+            if(this.agendamentoRepository.findAllByMedicoIdOrderByDataHoraAsc(id).isEmpty()) {
+                medico.get().setAtivo(false);
+                this.medicoRepository.save(medico.get());
+            } else {
+                throw new RuntimeException("Certifique-se que não há consultas agendadas, caso tenha, a desativação não poderá ser concluída.");
+            }
         }
     }
 }
