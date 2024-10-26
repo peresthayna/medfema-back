@@ -48,7 +48,7 @@ public class PacienteService {
     public void deletar(Long id) {
         Optional<Paciente> paciente = this.pacienteRepository.findById(id);
         if(paciente.isPresent()) {
-            if(this.agendamentoRepository.findAllByPacienteIdOrderByDataHoraAsc(id).isEmpty()) {
+            if(this.agendamentoRepository.findAllByPacienteIdAndAtivoTrueOrderByDataHoraAsc(id).isEmpty()) {
                 paciente.get().setAtivo(false);
                 this.pacienteRepository.save(paciente.get());
             } else {

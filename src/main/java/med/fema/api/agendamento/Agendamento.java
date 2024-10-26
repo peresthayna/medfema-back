@@ -12,6 +12,7 @@ import med.fema.api.paciente.Paciente;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 @Getter
@@ -53,7 +54,8 @@ public class Agendamento {
         this.id = agendamentoDTO.getId();
         this.medico = new Medico(agendamentoDTO.getMedico());
         this.paciente = new Paciente(agendamentoDTO.getPaciente());
-        this.dataHora = agendamentoDTO.getDataHora();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        this.dataHora = LocalDateTime.parse(agendamentoDTO.getDataHora(), formatter);
         this.fimConsulta = this.dataHora.plusHours(1);
         this.ativo = true;
         this.motivoCancelamento = null;

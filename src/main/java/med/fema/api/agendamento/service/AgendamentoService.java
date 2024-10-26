@@ -25,19 +25,20 @@ public class AgendamentoService {
     private static final LocalTime HORARIO_FECHAMENTO = LocalTime.of(18, 0);
 
     public List<Agendamento> findAll() {
-        return this.agendamentoRepository.findAllByDataHoraAfterOrderByDataHoraAsc(LocalDateTime.now());
+        List<Agendamento> agendamentos = this.agendamentoRepository.findAllByDataHoraAfterAndAtivoTrueOrderByDataHoraAsc(LocalDateTime.now());
+        return agendamentos;
     }
 
     public List<Agendamento> findAllByPacienteId(Long id) {
-        return this.agendamentoRepository.findAllByPacienteIdOrderByDataHoraAsc(id);
+        return this.agendamentoRepository.findAllByPacienteIdAndAtivoTrueOrderByDataHoraAsc(id);
     }
 
     public List<Agendamento> findAllByMedicoId(Long id) {
-        return this.agendamentoRepository.findAllByMedicoIdOrderByDataHoraAsc(id);
+        return this.agendamentoRepository.findAllByMedicoIdAndAtivoTrueOrderByDataHoraAsc(id);
     }
 
     public List<Agendamento> findAllByMedicoNomeOrPacienteNome(String nome) {
-        return this.agendamentoRepository.findAllByPacienteNomeContainingOrMedicoNomeContainingOrderByDataHoraAsc(nome, nome);
+        return this.agendamentoRepository.findAllByPacienteNomeContainingOrMedicoNomeContainingAndAtivoTrueOrderByDataHoraAsc(nome, nome);
     }
 
     public Agendamento findById(Long id) {
@@ -65,7 +66,7 @@ public class AgendamentoService {
         return agendamentoRepository.save(agendamento);
     }
 
-    public void cancelarConsulta(Long id, MotivoCancelamento motivo) throws Exception {
+    public void cancelarConsulta(Long id, String motivo) throws Exception {
         Agendamento agendamento = agendamentoRepository.findById(id)
                 .orElseThrow(() -> new Exception("Agendamento não encontrado"));
         if(motivo == null) {
@@ -92,22 +93,22 @@ public class AgendamentoService {
         if (!agendamento.getMedico().isAtivo()) {
             throw new Exception("O médico está inativo e não pode realizar consultas.");
         }
-        List<Agendamento> consultasNoMesmoDiaPaciente = agendamentoRepository.findByPacienteAndDataHoraOrderByDataHoraAsc(agendamento.getPaciente(), agendamento.getDataHora());
+        List<Agendamento> consultasNoMesmoDiaPaciente = agendamentoRepository.findByPacienteAndDataHoraAndAtivoTrueOrderByDataHoraAsc(agendamento.getPaciente(), agendamento.getDataHora());
         if (!consultasNoMesmoDiaPaciente.isEmpty()) {
             throw new Exception("Já existe uma consulta agendada para este paciente no mesmo dia.");
         }
-        List<Agendamento> consultasComMesmoMedico = agendamentoRepository.findByMedicoAndDataHoraOrderByDataHoraAsc(agendamento.getMedico(), agendamento.getDataHora());
+        List<Agendamento> consultasComMesmoMedico = agendamentoRepository.findByMedicoAndDataHoraAndAtivoTrueOrderByDataHoraAsc(agendamento.getMedico(), agendamento.getDataHora());
         if (!consultasComMesmoMedico.isEmpty()) {
             throw new Exception("O médico já possui uma consulta agendada nesse horário.");
         }
     }
 
-    private void validacoesCancelamento(Agendamento agendamento, MotivoCancelamento motivo) throws Exception {
+    private void validacoesCancelamento(Agendamento agendamento, String motivo) throws Exception {
         if (agendamento.getDataHora().isBefore(LocalDateTime.now().plusHours(24))) {
             throw new Exception("A consulta só pode ser cancelada com 24 horas de antecedência.");
         }
         agendamento.setAtivo(false);
-        agendamento.setMotivoCancelamento(motivo);
+        agendamento.setMotivoCancelamento(MotivoCancelamento.fromDescricao(motivo));
         agendamentoRepository.save(agendamento);
     }
 }

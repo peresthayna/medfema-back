@@ -31,12 +31,12 @@ public class AgendamentoController {
         return AgendamentoDTO.converterParaListDTO(agendamentoService.findAllByMedicoId(id));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public AgendamentoDTO findById(@PathVariable Long id) {
         return new AgendamentoDTO(agendamentoService.findById(id));
     }
 
-    @GetMapping("/{nome}")
+    @GetMapping("/nome/{nome}")
     public List<AgendamentoDTO> findByNome(@PathVariable String nome) {
         return AgendamentoDTO.converterParaListDTO(agendamentoService.findAllByMedicoNomeOrPacienteNome(nome));
     }
@@ -46,8 +46,8 @@ public class AgendamentoController {
         agendamentoService.criarAgendamento(new Agendamento(agendamento));
     }
 
-    @PostMapping("/cancelar/{id}")
-    public ResponseEntity<String> cancelarAgendamento(@PathVariable Long id, @RequestParam MotivoCancelamento motivo) {
+    @DeleteMapping("/deletar/{id}/{motivo}")
+    public ResponseEntity<String> cancelarAgendamento(@PathVariable Long id, @PathVariable String motivo) {
         try {
             agendamentoService.cancelarConsulta(id, motivo);
             return ResponseEntity.ok("Consulta cancelada com sucesso.");

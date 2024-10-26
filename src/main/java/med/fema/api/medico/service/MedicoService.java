@@ -49,7 +49,7 @@ public class MedicoService {
     public void deletar(Long id) {
         Optional<Medico> medico = this.medicoRepository.findById(id);
         if(medico.isPresent()) {
-            if(this.agendamentoRepository.findAllByMedicoIdOrderByDataHoraAsc(id).isEmpty()) {
+            if(this.agendamentoRepository.findAllByMedicoIdAndAtivoTrueOrderByDataHoraAsc(id).isEmpty()) {
                 medico.get().setAtivo(false);
                 this.medicoRepository.save(medico.get());
             } else {
