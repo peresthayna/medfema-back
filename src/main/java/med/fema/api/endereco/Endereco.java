@@ -22,12 +22,8 @@ public class Endereco {
     public Endereco(EnderecoDTO enderecoDTO) {
         this.logradouro = enderecoDTO.getLogradouro();
         this.cep = enderecoDTO.getCep();
-        if(!enderecoDTO.getNumero().isEmpty()){
-            this.numero = enderecoDTO.getNumero();
-        }
-        if(!enderecoDTO.getComplemento().isEmpty()){
-            this.complemento = enderecoDTO.getComplemento();
-        }
+        this.numero = enderecoDTO.getNumero();
+        this.complemento = enderecoDTO.getComplemento();
         this.cidade = enderecoDTO.getCidade();
         this.uf = enderecoDTO.getUf();
     }

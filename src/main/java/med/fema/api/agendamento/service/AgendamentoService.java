@@ -50,6 +50,11 @@ public class AgendamentoService {
         }
     }
 
+    public Agendamento atualizarAgendamento(Long id, Agendamento agendamento) throws Exception {
+        agendamento.setId(id);
+        return this.criarAgendamento(agendamento);
+    }
+
     public Agendamento criarAgendamento(Agendamento agendamento) throws Exception {
         if(agendamento.equals(null)) {
             return null;

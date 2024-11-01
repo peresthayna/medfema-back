@@ -46,6 +46,11 @@ public class AgendamentoController {
         agendamentoService.criarAgendamento(new Agendamento(agendamento));
     }
 
+    @PutMapping("/atualizar/{id}")
+    public void atualizar(@PathVariable Long id, @RequestBody AgendamentoDTO agendamento) throws Exception {
+        agendamentoService.atualizarAgendamento(id, new Agendamento(agendamento));
+    }
+
     @DeleteMapping("/deletar/{id}/{motivo}")
     public ResponseEntity<String> cancelarAgendamento(@PathVariable Long id, @PathVariable String motivo) {
         try {

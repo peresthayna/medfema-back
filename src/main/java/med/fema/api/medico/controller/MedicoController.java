@@ -35,7 +35,7 @@ public class MedicoController {
         this.medicoService.salvar(new Medico(medicoDTO));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("atualizar/{id}")
     public void atualizar(@PathVariable("id") Long id, @RequestBody MedicoDTO medicoDTO) {
         this.medicoService.atualizar(id, new Medico(medicoDTO));
     }
